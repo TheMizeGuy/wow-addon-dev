@@ -1,0 +1,8 @@
+## Interface: 120005
+## Title: Example Encounter Mod
+## Notes: Boss-fight handler skeleton. Demonstrates ENCOUNTER_START/END filtering, hard lockout, generation counters, UNIT_AURA detection.
+## Author: YourName
+## Version: 1.0.0
+## SavedVariables: EncounterModDB
+
+EncounterMod.lua

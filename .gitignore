@@ -1,0 +1,22 @@
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backups
+*.bak
+*.tmp
+*~
+
+# Logs
+*.log
+
+# Local test outputs
+codebase-map.html
+*.zip

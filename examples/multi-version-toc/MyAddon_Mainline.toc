@@ -1,0 +1,9 @@
+## Interface: 120005
+## Title: Multi-Version Addon
+## Notes: Retail (Midnight 12.0+).
+## Author: YourName
+## Version: 1.0.0
+## SavedVariables: MyAddonDB
+
+Core.lua
+Retail.lua

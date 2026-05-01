@@ -1,0 +1,10 @@
+## Interface: 120005, 50503, 11508
+## Title: Multi-Version Addon
+## Notes: Fallback TOC; loads everywhere with feature gates in Core.lua.
+## Author: YourName
+## Version: 1.0.0
+## SavedVariables: MyAddonDB
+
+Core.lua
+Retail.lua [AllowLoadGameType mainline]
+Vanilla.lua [AllowLoadGameType vanilla, tbc]

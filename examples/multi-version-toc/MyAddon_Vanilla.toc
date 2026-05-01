@@ -1,0 +1,9 @@
+## Interface: 11508
+## Title: Multi-Version Addon
+## Notes: Vanilla / Classic Era build.
+## Author: YourName
+## Version: 1.0.0
+## SavedVariables: MyAddonDB
+
+Core.lua
+Vanilla.lua

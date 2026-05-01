@@ -1,0 +1,13 @@
+## Interface: 120005
+## Title: My Ace3 Addon
+## Notes: Ace3-based addon with profile-aware DB, options panel, slash command.
+## Author: YourName
+## Version: 1.0.0
+## OptionalDeps: Ace3
+## SavedVariables: MyAce3AddonDB
+
+# In a real addon you would either depend on a standalone Ace3 install
+# or embed Ace3 yourself via a Libs/ folder + embeds.xml.
+# Skeleton below assumes Ace3 is loaded by another addon (most users have it).
+
+Core.lua
