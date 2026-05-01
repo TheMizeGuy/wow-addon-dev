@@ -81,31 +81,45 @@ git clone https://github.com/TheMizeGuy/wow-addon-dev.git .claude/skills/wow-add
 
 ### Codex CLI
 
-Codex follows the same Agent Skills standard. Drop into the user-level skills directory:
+Personal skills live at `~/.codex/skills/` ([per OpenAI's Codex docs](https://developers.openai.com/codex/skills)). Easiest install via the `gh skill` command:
+
+```bash
+gh skill install TheMizeGuy/wow-addon-dev
+```
+
+Or clone manually:
 
 ```bash
 git clone https://github.com/TheMizeGuy/wow-addon-dev.git ~/.codex/skills/wow-addon-dev
 ```
 
-Verify in a Codex session by asking a WoW addon question; the skill should auto-load via Codex's skill discovery. If your Codex install uses a different path, consult `codex --help` for the skills directory location.
+Override the Codex home with `CODEX_HOME` if you want a different location. Disable a skill without removing it via `[[skills.config]]` entries in `~/.codex/config.toml`.
 
 ### Gemini CLI
 
-Gemini CLI loads skill metadata at session start and activates the full content via the `activate_skill` tool:
+User-scoped skills live at `~/.gemini/skills/` ([per Gemini CLI docs](https://geminicli.com/docs/cli/skills/)). Gemini also accepts the tool-agnostic `.agents/skills/` alias at the same scope.
 
 ```bash
 git clone https://github.com/TheMizeGuy/wow-addon-dev.git ~/.gemini/skills/wow-addon-dev
 ```
 
-Restart Gemini CLI. Then ask a WoW addon question; Gemini should call `activate_skill('wow-addon-dev')` and load the body.
+Restart Gemini CLI. When you ask a matching question, Gemini calls the `activate_skill` tool to load the full body and shows a confirmation prompt naming the skill and the directory it gains access to.
 
 ### GitHub Copilot CLI
 
-Copilot CLI auto-discovers skills from installed plugins. Either install through your plugin manager, or for a manual install:
+Personal skills live at `~/.copilot/skills/` or the tool-agnostic alias `~/.agents/skills/` ([per GitHub's Copilot CLI docs](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills)). Easiest install via `gh skill`:
+
+```bash
+gh skill install TheMizeGuy/wow-addon-dev
+```
+
+Or clone manually:
 
 ```bash
 git clone https://github.com/TheMizeGuy/wow-addon-dev.git ~/.copilot/skills/wow-addon-dev
 ```
+
+After installing, run `/skills reload` inside an existing Copilot CLI session, or just start a new session. Verify with `/skills info wow-addon-dev`.
 
 ### Generic / any other agent
 
