@@ -20,3 +20,10 @@ desktop.ini
 # Local test outputs
 codebase-map.html
 *.zip
+
+# AI agent tooling (local, per-clone state)
+.claude/
+.serena/
+.anti-slop/
+.remember/
+node_modules/
