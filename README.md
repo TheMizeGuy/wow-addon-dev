@@ -147,6 +147,28 @@ Or invoke explicitly: `/wow-addon-dev` (Claude Code) / `activate_skill('wow-addo
 
 The skill ships **PowerShell utility scripts** under `scripts/` that smoke-test against a real WoW install (verified: scans 73-addon directories, reads exe versions, parses BugGrabber SavedVariables). On macOS or Linux, PowerShell Core works (`pwsh`), or port the logic to bash — the operations are simple file reads.
 
+### Walkthrough: fixing an "out of date" addon
+
+A worked example, start to finish:
+
+1. Install the skill (see Installation above) and restart the agent.
+2. Prompt: *"My addon shows 'out of date' since the patch, what do I do?"*
+3. The skill's description matches on "out of date" and the agent loads `SKILL.md`. The workflow router points an "out of date" / TOC question at `references/toc-format.md`.
+4. The agent runs `scripts/get-interface-version.ps1` to read the current retail Interface number from the installed `Wow.exe` build (or asks the user to run `/dump select(4, GetBuildInfo())` in-game if the script can't reach the client).
+5. The agent edits the addon's `## Interface:` line — directly, or via `scripts/set-interface-version.ps1 <addon-folder> <new-interface>` for multi-TOC addons — then runs `scripts/validate-toc.ps1 <path-to-.toc>` to confirm zero findings.
+6. The agent tells the user to **fully restart WoW** (a TOC change is not picked up by `/reload`) and reports exactly what it verified (the interface number written, the validator's clean result) rather than claiming the fix "should work."
+
+### Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| Skill never activates on WoW-related prompts | Agent hasn't picked up a freshly created top-level skills directory | Fully restart the agent session after first install (live file-watch works for existing directories, not brand-new ones) |
+| `/wow-addon-dev` doesn't autocomplete in Claude Code | Skill installed at the wrong scope, or session started before install | Confirm the clone landed in `~/.claude/skills/wow-addon-dev` (user) or `.claude/skills/wow-addon-dev` (project), then restart |
+| PowerShell scripts fail with "not recognized" on macOS/Linux | No PowerShell runtime installed | Install PowerShell Core (`pwsh`) or port the script's logic to bash — the operations are plain file reads |
+| Addon still shows "out of date" after bumping `## Interface:` | WoW was `/reload`ed instead of fully restarted, or a per-edition TOC file (`_Vanilla.toc`, `_Cata.toc`) was missed | Fully quit and relaunch WoW; run `scripts/set-interface-version.ps1` (not a hand-edit) so every TOC variant gets bumped together |
+| Packaged zip won't load after CurseForge/manual install | Top-level folder name doesn't match the addon's own `.toc` base name | Rename the zip's root folder to exactly match `AddonName.toc`'s base name — WoW enforces this |
+| Secret-value / private-aura errors after the 12.0 patch | Pre-Midnight code reading `aura.spellId` or similar directly | See `references/midnight-12.md` for the `C_Spell`/`C_ActionBar` migration and Secret Values handling |
+
 ## Compatibility
 
 - **Claude Code** ≥ 2.0 (verified)
