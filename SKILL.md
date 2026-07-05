@@ -130,9 +130,9 @@ These live in `scripts/` and are the deterministic actions the skill performs re
 
 Working starter templates in `examples/` — copy and adapt rather than write from scratch:
 
-- `examples/minimal-addon/` — Single-file addon, no libs. Frame + event handler + SavedVariables + slash command. The right starting point for ~80% of new addons.
-- `examples/ace3-addon/` — Ace3 (`AceAddon-3.0`, `AceEvent-3.0`, `AceDB-3.0`) skeleton with profile-aware DB, options panel via `AceConfig-3.0`, slash command. Use when the addon has more than one config knob.
-- `examples/encounter-mod/` — Boss-fight handler: `ENCOUNTER_START`/`ENCOUNTER_END` filtering, hard lockout pattern, `C_Timer.After` with generation counter to invalidate stale callbacks across pulls. Distilled from CrownCosmosCallout.
+- `examples/MinimalAddon/` — Single-file addon, no libs. Frame + event handler + SavedVariables + slash command. The right starting point for ~80% of new addons.
+- `examples/MyAce3Addon/` — Ace3 (`AceAddon-3.0`, `AceEvent-3.0`, `AceDB-3.0`) skeleton with profile-aware DB, options panel via `AceConfig-3.0`, slash command. Use when the addon has more than one config knob.
+- `examples/EncounterMod/` — Boss-fight handler: `ENCOUNTER_START`/`ENCOUNTER_END` filtering, hard lockout pattern, `C_Timer.After` with generation counter to invalidate stale callbacks across pulls. Distilled from CrownCosmosCallout.
 - `examples/options-panel/` — Modern Settings API panel using `Settings.RegisterCanvasLayoutCategory` + `Settings.OpenToCategory`, with the legacy `InterfaceOptions_AddCategory` fallback for Classic.
 - `examples/addon-message/` — Versioned addon-message protocol with prefix registration, payload parsing, and a 1-second resolve window for distributed coordination.
 - `examples/multi-version-toc/` — Per-edition TOC files (`_Mainline.toc`, `_Vanilla.toc`, `_Cata.toc`) sharing a Lua core, with conditional file loading via `[AllowLoadGameType ...]`.
@@ -145,6 +145,15 @@ Working starter templates in `examples/` — copy and adapt rather than write fr
 - **When writing new addon code**: default to single-file Lua (no Ace3) unless the addon has multiple configurable behaviors or needs profile management. Ace3 is the right call for medium+ addons; overkill for one-shots.
 - **Always tell the user to fully restart WoW** (not `/reload`) after a TOC edit. After a Lua-only edit, `/reload` is fine.
 - **Never claim an addon "should work"** without saying what was tested. If you couldn't run it in-game, say so — the user can run a `/<addon> test` style harness (see the test-harness pattern in `references/lessons-from-ccc.md`).
+
+## Verification before claiming done
+
+Do not report an addon change as working without stating which of these actually ran:
+
+1. **After any `.toc` edit** — run `scripts/validate-toc.ps1 <path-to-.toc>`; expect zero findings. Remind the user a full client restart (not `/reload`) is required.
+2. **After Lua edits** — syntax-check if a Lua interpreter is available (`luac -p <file>` or `lua -e "assert(loadfile('<file>'))"`); otherwise re-read the diff for unbalanced `end`s and nil-index risks. In-game: enable `/console scriptErrors 1` (or BugSack), exercise the changed code path, then run `scripts/read-bugsack.ps1` and confirm zero new errors.
+3. **After packaging** — open the zip and confirm the top-level structure is `AddonName/AddonName.toc`; a nested or renamed folder will not load.
+4. **If in-game testing was not possible** — say so explicitly and offer the slash-command test-harness pattern from `references/lessons-from-ccc.md` ("Test harnesses pay for themselves") so the user can verify with one command.
 
 ## Quick wins for common asks
 
